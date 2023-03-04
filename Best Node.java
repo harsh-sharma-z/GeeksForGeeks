@@ -1,85 +1,93 @@
+//{ Driver Code Starts
+import java.io.*;
+import java.util.*;
+
+
+class IntArray
+{
+    public static int[] input(BufferedReader br, int n) throws IOException
+    {
+        String[] s = br.readLine().trim().split(" ");
+        int[] a = new int[n];
+        for(int i = 0; i < n; i++)
+            a[i] = Integer.parseInt(s[i]);
+
+        return a;
+    }
+
+    public static void print(int[] a)
+    {
+        for(int e : a)
+            System.out.print(e + " ");
+        System.out.println();
+    }
+
+    public static void print(ArrayList<Integer> a)
+    {
+        for(int e : a)
+            System.out.print(e + " ");
+        System.out.println();
+    }
+}
+
+class GFG {
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int t;
+        t = Integer.parseInt(br.readLine());
+        while(t-- > 0){
+            
+            int N;
+            N = Integer.parseInt(br.readLine());
+            
+            
+            int[] A = IntArray.input(br, N);
+            
+            
+            int[] P = IntArray.input(br, N);
+            
+            Solution obj = new Solution();
+            long res = obj.bestNode(N, A, P);
+            
+            System.out.println(res);
+            
+        }
+    }
+}
+
+// } Driver Code Ends
+
+
 class Solution {
-
-    class pair{
-
-        int parent,value;
-
-        pair(int p,int v){
-
-            parent=p;
-
-            value=v;
-
+    public static long bestNode(int N, int[] A, int[] P) {
+        Set<Integer> non_leaf = new HashSet<>();
+        for(int i=0; i<N; i++)
+            non_leaf.add(P[i]);
+            
+            //s2
+        ArrayList<Integer> leaf_node = new ArrayList<>();
+        for(int i = 1; i <= P.length; i++){
+            if(!non_leaf.contains(i))
+                leaf_node.add(i);
         }
-
-    }
-
-    long max=Long.MIN_VALUE;
-
-    void dfs(int v,int val,HashMap<Integer,ArrayList<pair>> adj,int[] vis,int sum,int level){
-
-        vis[v]=1;
-
-        //System.out.println(sum);
-
-        if(adj.get(v)==null){
-
-            max=Math.max(max,sum);
-
-            max=Math.max(max,val);
-
-            return;
-
-        }
-
-        for(pair i:adj.get(v)){
-
-            if(vis[i.parent]==0){
-
-                dfs(i.parent,i.value,adj,vis,sum+i.value*(int)Math.pow(-1,level-1),level+1);
-
+        
+        //s3
+          //traverse from leaf to root and store max at each and every time visited new node
+        //adv : 1. we know in which dir to move since parent is already def
+        // as in moving from root have to track both sides.
+          int ans = Integer.MIN_VALUE;
+        for(int leaf : leaf_node )
+        {
+            int curr_node = leaf;
+            int sum=0;
+            while(curr_node!=-1) //while curr_node  reaches  root ie == -1
+            {
+                sum = -sum;
+                sum+= A[curr_node-1];
+                ans = Math.max(ans, sum);
+                curr_node = P[curr_node-1];
             }
-
         }
-
+        return ans;
     }
-
-    public long bestNode(int N, int[] A, int[] P) {
-
-          HashMap<Integer,ArrayList<pair>> adj= new HashMap<>();
-
-          for(int i=0;i<P.length;i++){
-
-              if(adj.containsKey(P[i])){
-
-                  adj.get(P[i]).add(new pair(i+1,A[i]));
-
-              }
-
-              else{
-
-              adj.put(P[i],new ArrayList<>());
-
-              adj.get(P[i]).add(new pair(i+1,A[i]));
-
-              }
-
-          }
-
-          for(int i=1;i<=P.length;i++){
-
-              int vis[]= new int[P.length+1];
-
-              dfs(i,A[i-1],adj,vis,A[i-1],0);
-
-              //System.out.println(max);
-
-          }
-
-          
-
-          return max;
-
-    }
-
 }
