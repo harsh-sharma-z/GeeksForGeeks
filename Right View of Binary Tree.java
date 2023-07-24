@@ -132,18 +132,18 @@ class Solution{
     //Function to return list containing elements of right view of binary tree.
     ArrayList<Integer> rightView(Node node) {
         //add code here.
-        ArrayList<Integer> res=new ArrayList<>();
-        help(node,res,0);
+        ArrayList<Integer> res = new ArrayList<>();
+        help(node , res , 0);
         return res;
     }
-    void help(Node node,ArrayList<Integer> res, int h)
+    private void help(Node root , ArrayList<Integer> res , int h)
     {
-        if(node==null)
-        return ;
-        if(h==res.size())
-        res.add(node.data);
-        help(node.right,res,h+1);
-        help(node.left,res,h+1);
+        if(root == null)
+            return;
+        if(h == res.size())
+            res.add(root.data);
+        help(root.right , res , h + 1);
+        help(root.left , res , h + 1);
     }
 }
 
