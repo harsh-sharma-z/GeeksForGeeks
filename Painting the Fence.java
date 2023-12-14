@@ -11,21 +11,21 @@ import java.util.*;
 
 class Solution
 {
-    long mod = 1000000000 + 7;
-
-    long countWays(int n, int k) {
-        if (n < 3) {
-            return (long) Math.pow(k, n);
+    long countWays(int n,int k)
+    {
+        if(n == 1)
+            return k;
+            
+        long mod = (long) 1e9 + 7, same = 0, diff = k;
+        
+        for(int i = 2; i <= n; i++) 
+        {
+            long prev = same;
+            same = diff;
+            diff = ((prev + same) * (k - 1)) % mod;
         }
-
-        long temp = k, res = (k * k) % mod;
-        for (int a = 3; a <= n; a++) {
-            long tmp = res - temp;
-            res = ((res * k) % mod - temp + mod) % mod;
-            temp = tmp;
-        }
-
-        return res;
+        
+        return (same + diff) % mod;
     }
 }
 
